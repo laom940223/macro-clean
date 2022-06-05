@@ -1,29 +1,87 @@
 
 
-import express, { Request, Response } from 'express'
+import express from 'express'
 import dotenv from 'dotenv'
+import session from "express-session"
+import uid from 'uid-safe'
 import { PrismaClient } from"@prisma/client"
+import { apiRouter } from './api/apiRouter'
+import { authRouter } from './auth/authRouter'
+import { createClient } from "redis"
+import { __prod__ } from './consts/prod'
+import { COOKIE_MAX_AGE } from './consts/cookkie-const'
 
+
+
+declare module 'express-session' {
+    interface SessionData {
+      user: {
+          role: string | null
+          email: string | null,
+          name: string | null
+      } | null;
+    }
+  }
 
 dotenv.config()
 
-const app = express()
+export const prisma = new PrismaClient()
+
+let RedisStore = require("connect-redis")(session)
 
 
-const prisma = new PrismaClient()
 
-app.get("/users", async (req:Request, res:Response)=>{
+const main = async ()=>{
+
+    const app = express()
+
+     let redisClient = createClient({ legacyMode: true })
+
+    await redisClient.connect()
 
 
-    const users = await prisma.user.findMany()
     
-    console.log(users)
+    app.use(
+        session({
 
-    return res.json(users)
-})
+            store: new RedisStore({ client: redisClient }),
+            saveUninitialized: false,
+            secret: "keyboard cat",
+            genid:  ()=>{
+                return   uid.sync(18)
+            },
+            
+            cookie:{
+                path: '/', 
+                httpOnly: true, 
+                secure: __prod__, 
+                maxAge: COOKIE_MAX_AGE
+            },
 
-app.listen(
-    process.env.PORT,
-    ()=>{
-    console.log("Its Alive, on port: "+ process.env.PORT)
-})
+            resave: false,
+        })
+    )
+
+
+
+
+    app.use(express.json())
+
+
+    app.use("/api", apiRouter)
+    app.use(authRouter)
+
+
+    app.listen(
+        process.env.PORT,
+        ()=>{
+        console.log("Its Alive, on port: "+ process.env.PORT)
+    })
+
+}
+
+
+main()
+
+// redis@v4
+
