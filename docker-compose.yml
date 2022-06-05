@@ -1,0 +1,26 @@
+services:
+
+  db:
+    image: postgres
+    restart: always
+    volumes:
+      - ./db-data:/var/lib/postgresql/data
+
+    environment:
+      POSTGRES_PASSWORD: example
+      POSTGRES_USER: macroclean
+      POSTGRES_DB: macroclean
+  
+  cache:
+    image: redis:6.2-alpine
+    ports:
+      - '6379:6379'
+    volumes: 
+      - ./cache:/data
+  
+  adminer:
+    depends_on: 
+      - db
+    image: adminer
+    ports:
+      - 8080:8080
