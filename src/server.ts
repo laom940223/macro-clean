@@ -1,23 +1,21 @@
 
 
 import express, { Response } from 'express'
-import { MainErrorHandler } from './errors/globalhandler'
+import { apiRouter } from './api/api-router'
+import { MainErrorHandler } from './errors/global-error-handler'
+import dotenv from 'dotenv'
 
+dotenv.config()
 
 const app = express()
 
+app.use("/api", apiRouter)
 
-
-app.get("/", (_, res:Response   )=>{
-
-    
-    return res.json({message:"Hello World"})
-})
 
 app.use(MainErrorHandler)
 
 app.listen(
-    4000,
+    process.env.PORT,
     ()=>{
-    console.log("Its Aliv3")
+    console.log("Its Alive, on port: "+ process.env.PORT)
 })
