@@ -8,3 +8,4 @@ export const apiRouter = Router()
 
 
 apiRouter.use("/users", protectedAdminRoute , usersRouter)
+
