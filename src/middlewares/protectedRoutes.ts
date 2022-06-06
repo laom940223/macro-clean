@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
+import { AppError } from "../errors/appError";
 
 
 
@@ -11,7 +12,7 @@ export const protectedUserRoute = async( req:Request, res: Response, next:NextFu
 
     if(!user){
 
-        return  res.status(StatusCodes.UNAUTHORIZED).json({message:" Please log in"})
+        return  next( new AppError(StatusCodes.UNAUTHORIZED, "You need to log in to access this route") )
     
     }
 
@@ -25,12 +26,12 @@ export const protectedAdminRoute = async (req: Request, res: Response, next:Next
     const { user } = req.session
 
     if(!user){
-        return  res.status(StatusCodes.UNAUTHORIZED).json({message:" Please log in"})
+        return  next( new AppError(StatusCodes.UNAUTHORIZED, "You need to log in to access this route") )
     }
 
 
     if(user.role!== "ADMIN"){
-        return  res.status(StatusCodes.UNAUTHORIZED).json({message:"You don't have the permission to be here"})
+        return  next( new AppError(StatusCodes.UNAUTHORIZED, "You don't have permission to access this route") )
     }
 }
 
