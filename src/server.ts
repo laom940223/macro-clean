@@ -10,6 +10,8 @@ import { authRouter } from './auth/authRouter'
 import { createClient } from "redis"
 import { __prod__ } from './consts/prod'
 import { COOKIE_MAX_AGE } from './consts/cookkie-const'
+import { NotFound } from './middlewares/notFound'
+import { errorHandler } from './middlewares/error/errorHandler'
 
 
 
@@ -38,8 +40,6 @@ const main = async ()=>{
      let redisClient = createClient({ legacyMode: true })
 
     await redisClient.connect()
-
-
     
     app.use(
         session({
@@ -62,15 +62,14 @@ const main = async ()=>{
         })
     )
 
-
-
-
     app.use(express.json())
-
+    
 
     app.use("/api", apiRouter)
     app.use(authRouter)
 
+    app.use("*", NotFound)
+    app.use(errorHandler)
 
     app.listen(
         process.env.PORT,
