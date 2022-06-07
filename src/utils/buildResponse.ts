@@ -5,8 +5,8 @@ import { AppError } from "../errors/appError"
 interface AppResponse<T >{
 
     status: StatusCodes 
-    data: T | null
-    errors: AppErrorResponse[] | null
+    data?: T | null
+    errors?: AppErrorResponse[] | null
 
 }
 
@@ -14,7 +14,7 @@ interface AppResponse<T >{
 export interface AppErrorResponse {
     message: string
     field : string | null
-    trace : string | null
+    trace? : string | null
 }
 
 

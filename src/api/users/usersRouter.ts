@@ -15,8 +15,9 @@ export const usersRouter = Router()
     usersRouter.post("/",         
             body("email")
             .exists().withMessage("Email can't be empty")
-            .normalizeEmail()
             .isEmail().withMessage("Please provide a valid email")
+            .normalizeEmail()
+            
             ,
 
             body("name")

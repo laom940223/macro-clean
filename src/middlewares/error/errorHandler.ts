@@ -11,7 +11,7 @@ import { AppErrorResponse, buildResponse } from "../../utils/buildResponse";
 export const errorHandler = async (error: AppError, req:Request, res: Response, next: NextFunction)=>{
 
 
-    console.log(error.validationErrors)
+    
 
     let errors = null
 

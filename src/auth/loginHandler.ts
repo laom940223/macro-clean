@@ -4,16 +4,14 @@ import { prisma } from "../server";
 import { buildResponse } from "../utils/buildResponse";
 import { comparePassword } from "../utils/password-utils";
 import { validationResult } from 'express-validator'
+import { AppError } from "../errors/appError";
 
 
 
 export const loginHandler = async(req:Request, res: Response, next: NextFunction)=>{
 
 
-    const errors = validationResult(req)
-
-    console.log(errors.array())
-
+    
     if(req.session.user){
 
         return res.json( buildResponse({ status: StatusCodes.OK, errors: null, data:{ message: "Already logged in" }  }) )
@@ -21,7 +19,16 @@ export const loginHandler = async(req:Request, res: Response, next: NextFunction
     
     }
 
-    const { email = "hello", password } = req.body
+    const errors = validationResult(req)
+
+    if(!errors.isEmpty()){
+
+        return next(new AppError(StatusCodes.BAD_REQUEST, "" , errors.mapped() ))
+
+    }
+
+
+    const { email, password } = req.body
 
     // return res.json({message: "testing"})
 
@@ -60,16 +67,19 @@ export const loginHandler = async(req:Request, res: Response, next: NextFunction
 
     }
 
-    return res
-            .status(StatusCodes.BAD_REQUEST)
-            .json( 
-                buildResponse(
-                    { status: StatusCodes.BAD_REQUEST , 
-                        data:null,
-                        errors : [{ 
-                            message:`The username or password provided are incorrect `, 
-                            field: "request", 
-                            trace:null }] }) )
+    return next(
+                new AppError(
+                    StatusCodes.BAD_REQUEST, 
+                    "",
 
+                    { "request":{
+                            msg:`The username or password provided are incorrect `, 
+                            param: "request",
+                            location:"body",
+                            value:null
+                            }
+                        }
+                     ))
     
+        
 }

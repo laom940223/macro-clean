@@ -4,10 +4,11 @@ import { validationResult  } from "express-validator"
 
 import { prisma } from "../../server";
 import { hashPassword } from "../../utils/password-utils";
-import { formatValidationErrors } from "../../errors/formatValidationErrors";
+
 import { StatusCodes } from "http-status-codes";
 import { buildResponse } from "../../utils/buildResponse";
 import { AppError } from "../../errors/appError";
+import { UserDto } from "../../dto/UserDto";
 
 
 
@@ -60,10 +61,23 @@ export const createUserHandler = async (req:Request, res:Response, next: NextFun
                 }
             })
 
+            // const { password } = createdUser
 
+
+            
             // console.log("")
 
-            return res.json( buildResponse({ status:StatusCodes.OK, data: createdUser, errors: null }) )
+            return res.json( buildResponse<UserDto>({ 
+                        status:StatusCodes.OK, 
+                        data: {
+                           id: createdUser.id,
+                           email: createdUser.email,
+                           name: createdUser.name,
+                           role: createdUser.role,
+                           createdAt: createdUser.createdAt
+                            
+                        } , 
+                        errors: null }) )
 
     } catch(err){
         

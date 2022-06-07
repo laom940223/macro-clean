@@ -10,7 +10,7 @@ export class AppError extends Error {
     validationErrors : Record<string, ValidationError> | null
     
 
-    constructor(statusCode: StatusCodes, message: string , validationErrors: Record<string, ValidationError> | null  ){
+    constructor(statusCode: StatusCodes, message: string= "There was an error in the server" , validationErrors: Record<string, ValidationError> | null =null ){
 
         super(message)
         this.statusCode= statusCode
