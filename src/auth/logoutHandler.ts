@@ -7,14 +7,20 @@ import { buildResponse } from "../utils/buildResponse";
 export const  logoutHandler = async (req: Request, res: Response, next:NextFunction)=>{
 
 
-    if(!req.session.user){
-        return res.status(StatusCodes.OK).json(
-            buildResponse({ status: StatusCodes.OK  })
-        )
-    }
+    // if(!req.session.user){
+    //     return res.status(StatusCodes.OK).json(
+    //         buildResponse({ 
+    //             status: StatusCodes.OK,
+    //             data:{
+    //                 message: "Log out "
+    //             }
+    //         })
+    //     )
+    // }
 
 
-    req.session.user =null
+    if( req.session.user) { req.session.user =null }
+    
 
     return res
             .status(StatusCodes.OK)

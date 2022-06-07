@@ -3,11 +3,16 @@ import { StatusCodes } from "http-status-codes";
 import { prisma } from "../server";
 import { buildResponse } from "../utils/buildResponse";
 import { comparePassword } from "../utils/password-utils";
-
+import { validationResult } from 'express-validator'
 
 
 
 export const loginHandler = async(req:Request, res: Response, next: NextFunction)=>{
+
+
+    const errors = validationResult(req)
+
+    console.log(errors.array())
 
     if(req.session.user){
 
@@ -16,7 +21,9 @@ export const loginHandler = async(req:Request, res: Response, next: NextFunction
     
     }
 
-    const { email, password } = req.body
+    const { email = "hello", password } = req.body
+
+    // return res.json({message: "testing"})
 
     const user= await prisma.user.findUnique({
                         where:{email}
@@ -46,7 +53,7 @@ export const loginHandler = async(req:Request, res: Response, next: NextFunction
                             email,
                             role
                         }
-                    }  }))
+                    }, errors:null  }))
         }
 
         
@@ -58,6 +65,7 @@ export const loginHandler = async(req:Request, res: Response, next: NextFunction
             .json( 
                 buildResponse(
                     { status: StatusCodes.BAD_REQUEST , 
+                        data:null,
                         errors : [{ 
                             message:`The username or password provided are incorrect `, 
                             field: "request", 

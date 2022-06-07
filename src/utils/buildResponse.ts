@@ -5,8 +5,8 @@ import { AppError } from "../errors/appError"
 interface AppResponse<T >{
 
     status: StatusCodes 
-    data?: T | null
-    errors?: AppErrorResponse[] | null
+    data: T | null
+    errors: AppErrorResponse[] | null
 
 }
 
