@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { body } from "express-validator";
+import { body, param } from "express-validator";
 import { createCategoryHandler } from "./createCategoryHandler";
 import { getAllCategoriesHandler } from "./getAllCategoriesHandler";
 import { getCategoryById } from "./getCategoryById";
@@ -10,7 +10,12 @@ export const categoryRouter =  Router()
 
 
     categoryRouter.get("/", getAllCategoriesHandler)
-    categoryRouter.get("/:categoryIdParam", getCategoryById)
+    categoryRouter.get("/:categoryIdParam", 
+        param("categoryIdParam")
+        
+            .isAlpha().withMessage("Category id needs to be a number")
+        ,
+    getCategoryById)
 
 
     categoryRouter.post("/",

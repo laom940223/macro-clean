@@ -61,7 +61,14 @@ export const createProductHandler = async (req:Request, res: Response, next: Nex
             })
 
         return res.status(StatusCodes.OK).json(
-            buildResponse<ProductDto>({ data: [createdProduct]  })
+            buildResponse<ProductDto>({ data:{
+                    items: [createdProduct]
+
+            }
+                    
+                
+            
+            })
         )
 
 

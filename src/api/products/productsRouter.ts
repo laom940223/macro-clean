@@ -12,11 +12,14 @@ export const productsRouter = Router()
 
     
     productsRouter.get("/",
-        query("page")
-            .optional(),
-        query("itemsPerPage")    
-            .optional()
-    , getAllProductsHandler )
+                        query("page")
+                            .optional(),
+                        query("itemsPerPage")    
+                            .optional()
+                    , getAllProductsHandler )
+
+    //
+
 
 
     productsRouter.delete("/:productId", deleteProductHandler)

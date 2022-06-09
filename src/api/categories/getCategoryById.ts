@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { validationResult } from "express-validator";
 import { StatusCodes } from "http-status-codes";
 import { CategoryDto } from "../../dto/categoryDto";
 import { AppError } from "../../errors/appError";
@@ -12,6 +13,19 @@ export const getCategoryById= async( req: Request, res: Response, next: NextFunc
 
     const { categoryIdParam } = req.params
 
+    
+    let  parsedIdParam =parseInt(categoryIdParam)
+
+    
+    if(isNaN(parsedIdParam)){
+
+        return next(new AppError(StatusCodes.BAD_REQUEST, [{ location:"path", message:"Params need to be a number" }]))
+
+    }
+    
+    
+
+    
 
     try{
 

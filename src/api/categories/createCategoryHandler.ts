@@ -24,6 +24,20 @@ export const createCategoryHandler = async( req:Request, res: Response, next:Nex
 
     try{
 
+         const categoryExists =await prisma.category.findMany({
+             where:{ 
+                 name: name
+             }
+         })
+
+         console.log(categoryExists)
+
+         if(categoryExists.length>0){
+             
+             return next(new AppError(StatusCodes.BAD_REQUEST, [{ location:"name", message:"Category name is already in use" }]))
+         }
+
+
        const createdCategory = await   prisma.category.create({
                 data:{
                     name
@@ -34,7 +48,7 @@ export const createCategoryHandler = async( req:Request, res: Response, next:Nex
         return res.status(StatusCodes.OK).json(  buildResponse({  data:{ items: [createdCategory]} })  )
 
     }catch(err){
-
+        console.log(err)
 
         return next(new AppError(StatusCodes.INTERNAL_SERVER_ERROR, [{ location:"server", message:"Something went wrong in the server" }]))
 
