@@ -23,12 +23,12 @@ export const getCategoryById= async( req: Request, res: Response, next: NextFunc
 
 
         return res.status(StatusCodes.OK).json(
-            buildResponse<CategoryDto>( { status: StatusCodes.OK, data:category }  )
+            buildResponse<CategoryDto>( {  data:{ items: [category!]} }  )
         )
 
     }catch(err){
 
-        return next(new AppError(StatusCodes.INTERNAL_SERVER_ERROR, "Something went wrong in the server"))
+        return next(new AppError(StatusCodes.INTERNAL_SERVER_ERROR, [{ location:"server", message:"Something went wrong in the server" }]))
     }
 
         

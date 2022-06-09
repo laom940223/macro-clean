@@ -4,6 +4,7 @@ import express from 'express'
 import dotenv from 'dotenv'
 import session from "express-session"
 import uid from 'uid-safe'
+import  cors from 'cors'
 import { PrismaClient } from"@prisma/client"
 import { apiRouter } from './api/apiRouter'
 import { authRouter } from './auth/authRouter'
@@ -18,6 +19,7 @@ import { errorHandler } from './middlewares/error/errorHandler'
 declare module 'express-session' {
     interface SessionData {
       user: {
+          id: number | null,
           role: string | null
           email: string | null,
           name: string | null
@@ -41,6 +43,9 @@ const main = async ()=>{
 
     await redisClient.connect()
     
+    app.use(cors({ origin:"http://localhost:3000", methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD","DELETE"],
+    credentials: true, }))
+
     app.use(
         session({
 
@@ -50,6 +55,7 @@ const main = async ()=>{
             genid:  ()=>{
                 return   uid.sync(18)
             },
+            // unset: 'destroy' ,
             
             cookie:{
                 path: '/', 

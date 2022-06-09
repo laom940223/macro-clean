@@ -1,21 +1,33 @@
 import { StatusCodes } from "http-status-codes";
-import { AppErrorResponse } from "../utils/buildResponse";
-import { ValidationError } from 'express-validator'
+
+
+
+export interface ErrorDetail {
+
+    location: string
+    message: string
+    stack?: string 
+}
+
 
 
 export class AppError extends Error {
 
 
     statusCode: StatusCodes
-    validationErrors : Record<string, ValidationError> | null
+    errorsDetails: ErrorDetail[] | null
+    // type : "validation" | "runtime"
+    
     
 
-    constructor(statusCode: StatusCodes, message: string= "There was an error in the server" , validationErrors: Record<string, ValidationError> | null =null ){
+    constructor(statusCode: StatusCodes,  errorsDetails: ErrorDetail[] ){
 
-        super(message)
+        super("Default message")
         this.statusCode= statusCode
-        this.validationErrors = validationErrors
+        this.errorsDetails = errorsDetails || []
 
     }
 
 }
+
+

@@ -24,6 +24,21 @@ POST http://localhost:4000/login
 Content-Type: application/json
 
 {
-    "email":"test@test.com",
+    "email":"test@tes2t.com",
     "password":"password"
 }
+
+
+###
+GET http://localhost:4000/api/categories
+Content-Type: application/json
+
+
+
+
+### 
+GET http://localhost:4000/api/products
+
+
+### 
+DELETE http://localhost:4000/api/products/20a8f691-4ae0-4618-a17e-cafcd32bea52

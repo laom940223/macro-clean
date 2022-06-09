@@ -4,7 +4,7 @@
 export type ProductDto ={
 
 
-    id:number           
+    id:string           
     barcode: string | null           
     name : string              
     description  : string     

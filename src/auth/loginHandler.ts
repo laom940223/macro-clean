@@ -5,6 +5,8 @@ import { buildResponse } from "../utils/buildResponse";
 import { comparePassword } from "../utils/password-utils";
 import { validationResult } from 'express-validator'
 import { AppError } from "../errors/appError";
+import { UserDto } from "../dto/UserDto";
+import { formatValidationErrors } from "../utils/formatValidationErrors";
 
 
 
@@ -14,8 +16,8 @@ export const loginHandler = async(req:Request, res: Response, next: NextFunction
     
     if(req.session.user){
 
-        return res.json( buildResponse({ status: StatusCodes.OK, errors: null, data:{ message: "Already logged in" }  }) )
-        // return res.json({message: "You are already logged in"})
+        return res.status(StatusCodes.OK).json( buildResponse({ data:{ message: "Already logged in" }  }) )
+        
     
     }
 
@@ -23,7 +25,11 @@ export const loginHandler = async(req:Request, res: Response, next: NextFunction
 
     if(!errors.isEmpty()){
 
-        return next(new AppError(StatusCodes.BAD_REQUEST, "" , errors.mapped() ))
+        return next(
+                new AppError(
+                    StatusCodes.BAD_REQUEST, 
+                    formatValidationErrors( errors.mapped())
+                     ))
 
     }
 
@@ -38,29 +44,33 @@ export const loginHandler = async(req:Request, res: Response, next: NextFunction
 
     if(user){
 
+        
+
         if(await comparePassword(password, user?.password)){
 
-
             req.session.user ={
+                id: user.id,
                 email: user.email,
                 name: user.name,
                 role: user.role
             }
         
-            const{ email, id, name, role } = user
+            // const{ email, id, name, role } = user
 
             return res
-                .json(buildResponse<{message:string, user : {  id: number,email: string , name: string | null, role: string }}>({
-                     status: StatusCodes.OK,
-                    data:{ 
-                        message: "Login successfully",
-                        user: {
-                            id, 
-                            name,
-                            email,
-                            role
-                        }
-                    }, errors:null  }))
+                .status(StatusCodes.OK)
+                .json(
+                    buildResponse<UserDto>({
+                        
+                        data: {
+                            items:[{
+                                id: user.id,
+                                name: user.name,
+                                email:user.email,
+                                role:user.role
+                            }]
+
+                        }, errors:null  }))
         }
 
         
@@ -70,15 +80,18 @@ export const loginHandler = async(req:Request, res: Response, next: NextFunction
     return next(
                 new AppError(
                     StatusCodes.BAD_REQUEST, 
-                    "",
 
-                    { "request":{
-                            msg:`The username or password provided are incorrect `, 
-                            param: "request",
-                            location:"body",
-                            value:null
-                            }
-                        }
+                    [ 
+                       {
+                           location:"password",
+                           message:"Please check password"
+                       },
+                       { 
+                           location:"email",
+                           message:"Please check email"
+                       }
+                            
+                    ]
                      ))
     
         

@@ -5,6 +5,6 @@ export type  UserDto ={
     email: string
     name: string
     role: string
-    createdAt: Date
+    createdAt?: Date
     
 }

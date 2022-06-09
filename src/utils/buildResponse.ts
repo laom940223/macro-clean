@@ -1,28 +1,37 @@
 import { StatusCodes } from "http-status-codes"
-import { AppError } from "../errors/appError"
+import { AppError, ErrorDetail } from "../errors/appError"
 
 
-interface AppResponse<T >{
+interface DataWithPagination <T> {
 
-    status: StatusCodes 
-    data?: T | null
-    errors?: AppErrorResponse[] | null
-
+    items: T[]
+    itemCount: number,
+    page: number 
+    hasMore: boolean
 }
 
+interface DataWithoutPagination<T>{
+    items: T[]
+}
 
-export interface AppErrorResponse {
+interface NoDataJustMessage{
     message: string
-    field : string | null
-    trace? : string | null
+}
+
+interface AppResponse<T>{
+       
+    data? :DataWithPagination<T> | DataWithoutPagination<T> | NoDataJustMessage  | null
+    errors?: ErrorDetail[] | null
+
 }
 
 
-export const buildResponse = <T> ( { status, data = null, errors = null }  :AppResponse<T> ):AppResponse<T> =>{
+
+export const buildResponse = <T> ( { data = null, errors = null }  :AppResponse<T> ):AppResponse<T> =>{
 
 
     return {
-        status, 
+        
         data, 
         errors
     } as AppResponse<T>

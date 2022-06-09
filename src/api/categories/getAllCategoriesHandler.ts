@@ -12,14 +12,12 @@ export const getAllCategoriesHandler = async(req:Request, res: Response, next: N
     try{
 
         const categories =  await prisma.category.findMany()
-
-
-        return res.status(StatusCodes.OK).json(  buildResponse({ status: StatusCodes.OK, data: categories }) )
+        return res.status(StatusCodes.OK).json(  buildResponse({  data:{ items: categories} }) )
 
     }catch(err){
 
 
-        return next(new AppError(StatusCodes.INTERNAL_SERVER_ERROR, ""))
+        return next(new AppError(StatusCodes.INTERNAL_SERVER_ERROR, [{location:"server", message:"Something went wrong in the server"}]))
     }
 
     
