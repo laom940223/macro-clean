@@ -13,12 +13,14 @@ datasource db {
 
 model User {
 
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  password  String    
-  name      String
-  role      String @db.VarChar(20)
+  id        Int         @id @default(autoincrement())
+  email     String      @unique
+  password  String      
+  name      String      
+  role      String      @db.VarChar(20)
   createdAt  DateTime   @default(now())
+
+  inbound   Inbound[]
 
  }
 
@@ -31,11 +33,29 @@ model User {
   description       String      @db.VarChar(400)
   price             Float 
   quantity_stock    Int         @default(0)
-  createdAt         DateTime    @default(now())
-  updatedAt         DateTime    @default(now()) @updatedAt
+  
+  
   category          Category    @relation(fields: [categoryId], references: [id])
   categoryId        Int
+ 
+  unit              Unit        @relation(fields: [unitId], references: [id])
+  unitId            Int
+  
+  
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @default(now()) @updatedAt
+ 
  }
+
+
+model Unit{
+
+  id            Int @id     @default(autoincrement())
+  name          String
+
+  products      Product[]
+
+}
 
 
 model Category{
@@ -47,6 +67,21 @@ model Category{
  }
 
 
+model Inbound{
+
+  id            String @id  @default(uuid())
+  createdAt     DateTime    @default(now())
+  user          User        @relation( fields: [userId], references: [id] )
+  userId        Int
+
+}
+
+model inboundItems{
+
+  id            Int  @id @default(autoincrement())
+  quantity      Float
+  price         Float
 
 
-    // return [2 /*return*/, next(new appError_1.AppError(http_status_codes_1.StatusCodes.BAD_REQUEST, \"\", { category: { param: \"category\", msg: \"Need to provide an existant category\", location: \"body\", value: null } }))];\n   70 }\n   71 console.log(\"Before the attempt to create the product\");\n→  72 return [4 /*yield*/, server_1.prisma.product.create({\n        data: {\n          name: 'Mas color 1L',\n          price: 24.54,\n      +   barcode: String,\n          description: 'Default product description',\n          categoryId: 1,\n          ~~~~~~~~~~\n      ?   id?: String,\n      ?   quantity_stock?: Int,\n      ?   createdAt?: DateTime,\n      ?   updatedAt?: DateTime,\n      ?   category?: {\n      ?     create?: CategoryCreateWithoutProductsInput | CategoryUncheckedCreateWithoutProductsInput,\n      ?     connectOrCreate?: CategoryCreateOrConnectWithoutProductsInput,\n      ?     connect?: CategoryWhereUniqueInput\n      ?   }\n        }\n      })\n\nUnknown arg `categoryId` in data.categoryId for type ProductCreateInput. Did you mean `category`?\nArgument barcode for data.barcode is missing.\n\nNote: Lines with + are required, lines with ? are optional.\n
+}
+

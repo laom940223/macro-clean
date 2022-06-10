@@ -8,6 +8,6 @@ import { usersRouter } from "./users/usersRouter";
 export const apiRouter = Router()
 
 
-apiRouter.use("/users", usersRouter)
+apiRouter.use("/users", protectedAdminRoute , usersRouter)
 apiRouter.use("/products", productsRouter)
 apiRouter.use("/categories", categoryRouter)

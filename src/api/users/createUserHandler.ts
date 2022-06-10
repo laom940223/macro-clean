@@ -101,24 +101,16 @@ export const createUserHandler = async (req:Request, res:Response, next: NextFun
                 default: return next(new AppError(StatusCodes.INTERNAL_SERVER_ERROR, [{location:"server", message:"Somethig went wrong in the server"}]))
             }
 
-            // console.log("Error message: " +err.message)
-            // console.log("Meta: " + err.meta)
-            // console.log("name: "+ err.name )
-
-            // console.log("Prisma Error")
         }
 
 
         if( err instanceof Prisma.PrismaClientValidationError){
 
-            // console.log(err)
-
         }
         
-        console.log(err)
 
         return next(new AppError(StatusCodes.INTERNAL_SERVER_ERROR, [{location:"server", message:"Somethig went wrong in the server"}]))
-        // return res.json({message: " Error en el server"})
+        
     }
         
 
