@@ -3,6 +3,8 @@ import { body, query } from "express-validator";
 import { createProductHandler } from "./createProductHandler";
 import { deleteProductHandler } from "./deleteProductHandler";
 import { getAllProductsHandler } from "./getAllProductsHandler";
+import { getOneProductHandler } from "./getOneProductHandler";
+import { updateProductHandler } from "./updateProductHandler";
 
 
 
@@ -10,6 +12,8 @@ import { getAllProductsHandler } from "./getAllProductsHandler";
 export const productsRouter = Router()
 
 
+    productsRouter.delete("/:productId", deleteProductHandler)
+    productsRouter.get("/:productId", getOneProductHandler)
     
     productsRouter.get("/",
                         query("page")
@@ -21,8 +25,6 @@ export const productsRouter = Router()
     //
 
 
-
-    productsRouter.delete("/:productId", deleteProductHandler)
 
     productsRouter.post("/",
     
@@ -52,3 +54,34 @@ export const productsRouter = Router()
                 
 
     ,createProductHandler)
+
+
+
+    productsRouter.patch("/:productId",
+
+                    body("name") 
+                    .optional()
+                    .isLength({ min: 5, max: 30  })
+                        .withMessage("Name must be between 5 and 30 characters long")
+                    ,
+                    body("barcode")
+                        .isString()
+                        .optional(),
+
+                    body("description")
+                        .isString()
+                        .optional(),
+
+
+                        
+                    body("price")
+                        .optional()
+                        .isFloat({ min: 0})
+                            .withMessage("You can't have negative prices")
+
+                            ,
+                    body("categoryId")
+                        .optional()
+
+
+                            ,updateProductHandler)

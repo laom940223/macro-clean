@@ -20,7 +20,6 @@ export const createProductHandler = async (req:Request, res: Response, next: Nex
 
     if(!valResult.isEmpty()){
         
-
         return next( new AppError(StatusCodes.BAD_REQUEST, formatValidationErrors(valResult.mapped()))) // valResult.mapped()) )
 
     }
