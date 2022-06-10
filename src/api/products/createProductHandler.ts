@@ -55,7 +55,9 @@ export const createProductHandler = async (req:Request, res: Response, next: Nex
                     price,
                     barcode: barcode || null,
                     description: description || DEFAULT_PRODUCT_DESCRIPTION,
-                    categoryId : categoryId
+                    categoryId : categoryId,
+                    unitId:1
+
                 }
             })
 

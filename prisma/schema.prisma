@@ -20,7 +20,7 @@ model User {
   role      String      @db.VarChar(20)
   createdAt  DateTime   @default(now())
 
-  inbound   Inbound[]
+  // inbound   Inbound[]
 
  }
 
@@ -38,7 +38,7 @@ model User {
   category          Category    @relation(fields: [categoryId], references: [id])
   categoryId        Int
  
-  unit              Unit        @relation(fields: [unitId], references: [id])
+  unit              ProductUnit        @relation(fields: [unitId], references: [id])
   unitId            Int
   
   
@@ -48,11 +48,11 @@ model User {
  }
 
 
-model Unit{
+model ProductUnit{
 
   id            Int @id     @default(autoincrement())
-  name          String
-
+  name          String      @unique
+  contraction   String      @unique
   products      Product[]
 
 }
@@ -63,25 +63,26 @@ model Category{
   id        Int @id @default(autoincrement())
   name      String @unique
   products  Product[]
+  
 
  }
 
 
-model Inbound{
+// model Inbound{
 
-  id            String @id  @default(uuid())
-  createdAt     DateTime    @default(now())
-  user          User        @relation( fields: [userId], references: [id] )
-  userId        Int
+//   id            String @id  @default(uuid())
+//   createdAt     DateTime    @default(now())
+//   user          User        @relation( fields: [userId], references: [id] )
+//   userId        Int
 
-}
+// }
 
-model inboundItems{
+// model inboundItems{
 
-  id            Int  @id @default(autoincrement())
-  quantity      Float
-  price         Float
+//   id            Int  @id @default(autoincrement())
+//   quantity      Float
+//   price         Float
 
 
-}
+// }
 
