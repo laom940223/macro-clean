@@ -19,7 +19,7 @@ export const getAllProductsHandler = async (req:Request, res:Response, next:Next
     const parsedPage = parseInt(page as string)  ||  DEFAULT_PAGE
     const parsedItemsPerPage = parseInt(itemsPerPage as string)  || DEFAULT_PAGE_SIZE
 
-    console.log((parsedPage-1) * parsedItemsPerPage)
+    // console.log((parsedPage-1) * parsedItemsPerPage)
     
     const skip = !(page===undefined && itemsPerPage===undefined )
 

@@ -13,7 +13,7 @@ import { __prod__ } from './consts/prod'
 import { COOKIE_MAX_AGE } from './consts/cookkie-const'
 import { NotFound } from './middlewares/notFound'
 import { errorHandler } from './middlewares/error/errorHandler'
-
+import  morgan from 'morgan'
 
 
 declare module 'express-session' {
@@ -45,6 +45,8 @@ const main = async ()=>{
     
     app.use(cors({ origin:"http://localhost:3000", methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD","DELETE"],
     credentials: true, }))
+
+    app.use(morgan('dev'))
 
     app.use(
         session({
