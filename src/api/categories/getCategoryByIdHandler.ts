@@ -37,7 +37,7 @@ export const getCategoryById= async( req: Request, res: Response, next: NextFunc
 
 
         return res.status(StatusCodes.OK).json(
-            buildResponse<CategoryDto>( {  data:{ items: [category!]} }  )
+            buildResponse<CategoryDto>( {  data:{ items:  [category!]} }  )
         )
 
     }catch(err){

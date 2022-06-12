@@ -1,7 +1,9 @@
 import { Router } from "express";
-import { body } from "express-validator";
+import { body, param as expressParam } from "express-validator";
+import { getOneProductHandler } from "../products/getOneProductHandler";
 import { createUnitHandler } from "./createUnitHandler";
 import { getAllProductUnitsHandler } from "./getAllProductUnitsHandler";
+import { getOneProductUnitHandler } from "./getOneProductUnitHandler";
 
 
 
@@ -21,3 +23,12 @@ unitsRouter.post("/",
 
 
 unitsRouter.get("/", getAllProductUnitsHandler)
+
+unitsRouter.get("/:unitId",
+
+                expressParam("unitId")
+                    .isNumeric()
+                    .withMessage("unitId needs to be a number")
+                    ,getOneProductUnitHandler)
+            
+                

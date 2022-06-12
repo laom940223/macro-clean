@@ -40,17 +40,16 @@ export const productsRouter = Router()
             body("description")
                 .optional(),
 
-            
-                
-            body("price")
-                
+            body("price")         
                 .exists().withMessage("Need to provide a price for the product")
                 .isFloat({ min: 0})
                     .withMessage("You can't have negative prices")
-            
                     ,
             body("categoryId")
-                .exists().withMessage("Need to provide a category")
+                .exists().withMessage("Need to provide a category"),
+            
+            body("unitId")
+                .exists().withMessage("Need to provide a unit")
                 
 
     ,createProductHandler)

@@ -4,7 +4,7 @@ import { StatusCodes } from "http-status-codes";
 
 export interface ErrorDetail {
 
-    location: string
+    location: "server" | "request" | "params" | string 
     message: string
     stack?: string 
 }

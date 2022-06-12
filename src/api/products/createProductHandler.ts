@@ -24,7 +24,7 @@ export const createProductHandler = async (req:Request, res: Response, next: Nex
 
     }
     
-    const { barcode, name, description, price, categoryId } = req.body
+    const { barcode, name, description, price, categoryId, unitId } = req.body
 
     try{
 
@@ -33,21 +33,18 @@ export const createProductHandler = async (req:Request, res: Response, next: Nex
             id: categoryId
         } })
 
-
-
-
-        // console.log(category)
-
         if(!category){
-            // console.log("There is no category!!!")
-
+            
             return next( new AppError(StatusCodes.BAD_REQUEST,  [{ location:"categoryId", message:"Provided category does not exist" }]))
         }
 
-        // console.log("Before the attempt to create the product")
-
-
+        const unit = await prisma.productUnit.findFirst({ where:{ id: unitId } })
         
+
+        if(!unit){
+            return next( new AppError(StatusCodes.BAD_REQUEST, [{ location:"unitId", message:"Provided product unit does not exist" }]))
+        }
+
         
             const createdProduct = await prisma.product.create({
                 data:{ 
